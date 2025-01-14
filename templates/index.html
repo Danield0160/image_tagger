@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <!-- <link rel="stylesheet" href="../static/css/style.css"> -->
+
+    <script>
+        let encodedString = "{{opciones}}";
+        // Decodificar con un elemento temporal
+        let textarea = document.createElement('textarea');
+        textarea.innerHTML = encodedString;
+        let decodedString = textarea.value;
+        // Convertir a un objeto JSON
+        let opciones = JSON.parse(decodedString);
+    </script>
+    
+    <title>Document</title>
+</head>
+<body oncontextmenu="return false;">
+
+
+    <!-- Botón para abrir el menú -->
+    <button class="open-btn" onclick="openSidebar()">☰ Abrir Menú</button>
+
+    <!-- Menú lateral -->
+    <div id="sidebar" class="sidebar">
+        <a href="#" class="close-btn" onclick="closeSidebar()">×</a>
+        <button class="add-btn" onclick="agregar_clase_imagen()">+</button>
+    </div>
+
+
+
+    <div class="workspace">
+        <div id="menu_clases">
+            <!-- <button onclick="cargar_imagen_nueva()">cargar imagen</button> -->
+            <button onclick="save_label()">guardar cajas</button>
+        </div>
+        <div class="imageContainer">
+            <img class="image" src="" alt=""> 
+        </div>
+    </div>
+</body>
+</html>
+<script src="{{ url_for('static', filename='js/script.js') }}"></script>
+<!-- <script src="../static/js/script.js"></script> -->
