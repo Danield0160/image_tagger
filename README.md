@@ -1,5 +1,5 @@
 # Image Tagger
-### Instruicciones
+### Instrucciones
 - Crear un venv
 - pip install flask
 - Ejecutar el app.py
