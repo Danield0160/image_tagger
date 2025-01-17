@@ -49,6 +49,7 @@ def guardar_label():
 
     print(boxes, image_path)
 
+    print(image_path)
     label_file_path = os.path.join(directorio, "labels", image_path[0], os.path.splitext(image_path[1])[0]+".txt" )
     with open(label_file_path, "w") as f:
         for box in boxes:
@@ -82,6 +83,38 @@ def get_image():
     
 
 
+@app.route('/get_all_images_name')
+def get_all_images_name():
+    return list(dict_archivo_label.items())
+
+@app.route('/get_especific_image',methods=["POST"])
+def get_especific_image():
+    datos = request.json  # Recibir datos en formato JSON
+    path1 = datos.get("path1", None)  # Leer el valor del parámetro
+    path2 = datos.get("path2", None)  # Leer el valor del parámetro
+    image_path = f'{directorio}/images/{path1}/{path2}'
+
+    cajas= []
+    path_label = dict_archivo_label[(path1,path2)]
+    if path_label and os.path.isfile(path_label):
+        with open(dict_archivo_label[(path1,path2)], 'rb') as label_file:
+            for linea in label_file.readlines():
+                cajas.append(linea.decode('utf-8').strip())  # Elimina caracteres como \r\n
+
+
+
+    with open(image_path, 'rb') as image_file:
+        image_base64 = base64.b64encode(image_file.read()).decode('utf-8')
+
+        # Crear la lista con el string y la imagen
+        response = [
+            [path1,path2],
+            image_base64,
+            cajas
+        ]
+    return jsonify(response)
+
+
 
 
 # Genera una estructura de carpetas compatible con el formato YOLO
@@ -108,7 +141,7 @@ def generar_diccionario_de_archivos(directorio):
     for folder in ["train","val","test"]:
         folder_content = os.listdir(os.path.join(directorio,"images",folder))
         for file in folder_content:
-            file_label = os.path.join(directorio,"labels",folder,file)
+            file_label = os.path.join(directorio,"labels",folder,os.path.splitext(file)[0]+".txt")
             if os.path.isfile(file_label):
                 diccionario[(folder,file)] = file_label
             else:
@@ -134,6 +167,7 @@ if __name__ == "__main__":
         generar_estructura_carpeta(directorio)
 
     dict_archivo_label = generar_diccionario_de_archivos(directorio)
+    print(dict_archivo_label)
 
     nombre_de_clases_disponibles = []
     with open(os.path.join(directorio, "classes.txt"), "r") as f:

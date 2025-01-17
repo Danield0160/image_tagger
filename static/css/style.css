@@ -62,7 +62,7 @@ body{
     z-index: 99;
 }
 
-.sidebar a {
+.sidebar a, .sidebar2 a {
     padding: 10px 15px;
     text-decoration: none;
     font-size: 18px;
@@ -71,11 +71,11 @@ body{
     transition: 0.3s;
 }
 
-.sidebar a:hover {
+.sidebar a:hover, .sidebar2 a:hover {
     background-color: #575757;
 }
 
-.sidebar .close-btn {
+.sidebar .close-btn, .sidebar2 .close-btn {
     position: absolute;
     top: 10px;
     right: 15px;
@@ -93,7 +93,8 @@ body{
     margin: 10px;
 }
 
-.sidebar >div{
+.sidebar >div,
+.sidebar2 >div{
     padding: 20px;
     border: 3px dashed;
     margin: 10px;
@@ -104,4 +105,32 @@ body{
     top: 20px;
     left: 20px;
     font-size: xx-large;
+}
+
+
+
+.sidebar2 {
+    height: 100%;
+    width: 0;
+    position: fixed;
+    top: 0;
+    right: 0;
+    background-color: #111;
+    overflow-x: hidden;
+    transition: 0.3s;
+    padding-top: 60px;
+    color: white;
+    z-index: 99;
+}
+/* Botón para abrir el menú */
+.open-btn2 {
+    font-size: 20px;
+    cursor: pointer;
+    background-color: #111;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    margin: 10px;
+    position: absolute;
+    right: 0;
 }

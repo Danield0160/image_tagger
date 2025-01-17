@@ -28,7 +28,7 @@ async function cargar_imagen_nueva() {
         }
 
         // Asignar los datos
-        const imagen_actual = data[0];
+        imagen_actual = data[0];
         const imageBase64 = data[1];
 
         // Decodificar la imagen base64 y asignarla al src del <img>
@@ -265,6 +265,7 @@ async function save_label(){
     });
     [...document.getElementsByClassName("box")].forEach((ele)=>{ele.remove()})
     cargar_imagen_nueva()
+    obtener_todas_las_imagenes()
 }
 
 async function agregar_clase_imagen() {
@@ -300,7 +301,114 @@ async function agregar_clase_imagen() {
         document.getElementById("sidebar").prepend(opcion)
     }
 }
-//crear menu de opciones de caja
+
+function construir_listado_imagenes(data){
+    lista = document.getElementById("sidebar2");
+    [...lista.children].forEach((x)=>{x.remove()})
+
+    for (let [image,label] of data) {
+        let div = document.createElement("div")
+        div.innerText = image[0] + "/" + image[1]
+        if (label){
+            div.style.background = "green"
+        }else{
+            div.style.background = "salmon"
+        }
+
+        div.onclick = ()=>{
+            poner_imagen_especifica(image)
+        }
+
+        lista.append(div)
+    }
+}
+
+async function poner_imagen_especifica(image) {
+    try {
+        const response = await fetch('/get_especific_image', {
+            method: 'POST', // Cambia a POST si es necesario
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                path1: image[0],
+                path2: image[1],
+            }),
+        });
+
+        if (response.ok) {
+            const result = await response.json();
+            console.log('Response:', result);
+
+
+        // Asignar los datos
+        imagen_actual = result[0];
+        const imageBase64 = result[1];
+
+        [...document.getElementsByClassName("box")].forEach((ele)=>{ele.remove()}) //Borrar las cajas
+        // Decodificar la imagen base64 y asignarla al src del <img>
+        document.getElementsByClassName('image')[0].src = `data:image/jpeg;base64,${imageBase64}`;
+        
+        if(result[2]){
+            crear_cajas_por_label(result[2])
+        }
+        } else {
+            console.error('Error en la solicitud:', response.statusText);
+        }
+    } catch (error) {
+        console.error('Error al realizar la solicitud:', error);
+    }
+}
+function crear_cajas_por_label(labels){
+    console.log(labels)
+
+    for (let caja of labels) {
+        caja = caja.split(" ")
+        
+        // Crear una nueva caja
+        currentBox = document.createElement('div');
+        currentBox.className = 'box';
+        currentBox.classList.add("is_active")
+        currentBox.style.left = `${(caja[1] * imageContainer.children[0].width) - ((caja[3] * (imageContainer.children[0].width))/2)}px`;
+        currentBox.style.width = `${caja[3] * imageContainer.children[0].width}px`;
+        currentBox.style.top = `${caja[2] * imageContainer.children[0].height - ((caja[4] * (imageContainer.children[0].height))/2)}px`;
+        currentBox.style.height = `${caja[4] * imageContainer.children[0].height}px`;
+        currentBox.style.background = "rgba(" + document.getElementById("sidebar").children[2+ +caja[0]].color + ",0.2)"
+        currentBox.style.borderColor = "rgb(" + document.getElementById("sidebar").children[2+ +caja[0]].color + ")"
+
+        currentBox.idImage = caja[0]
+
+
+        btn_eliminar = document.createElement("div")
+        let box = currentBox
+        btn_eliminar.onclick =()=> {box.remove()}
+        btn_eliminar.innerText = "X"
+        currentBox.append(btn_eliminar)
+
+        imageContainer.appendChild(currentBox);
+    }
+
+}
+async function obtener_todas_las_imagenes() {
+    const apiUrl = `/get_all_images_name`;
+
+    try {
+        // Hacer la solicitud GET
+        const response = await fetch(apiUrl);
+
+        // Verificar si la respuesta es exitosa
+        if (!response.ok) {
+            throw new Error(`Error en la solicitud: ${response.status} ${response.statusText}`);
+        }
+
+        let data = await response.json();
+        construir_listado_imagenes(data)
+
+    } catch (error) {
+        console.error('Error:', error);
+        alert("No hay más imágenes o ocurrió un error al cargar la imagen.");
+    }
+}
 
 
 function generarColorAleatorioRGB() {
@@ -318,4 +426,12 @@ function openSidebar() {
 
 function closeSidebar() {
     document.getElementById("sidebar").style.width = "0";
+}
+
+function openSidebar2() {
+    document.getElementById("sidebar2").style.width = "250px";
+}
+
+function closeSidebar2() {
+    document.getElementById("sidebar2").style.width = "0";
 }
