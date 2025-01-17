@@ -157,8 +157,8 @@ if __name__ == "__main__":
     #     ['perro','0,0,255', 1]
     # ]
 
-    # directorio = seleccionar_directorio()
-    directorio = "C:/Users/danie/Desktop/test"
+    directorio = seleccionar_directorio()
+    # directorio = "C:/Users/danie/Desktop/test"
     if not directorio:
         exit()
 
@@ -174,7 +174,7 @@ if __name__ == "__main__":
         for line in f.readlines():
             nombre_de_clases_disponibles.append(line[:-1])
 
-    app.run(debug=True)
+    app.run(debug=False)
 
 
 

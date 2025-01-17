@@ -304,7 +304,11 @@ async function agregar_clase_imagen() {
 
 function construir_listado_imagenes(data){
     lista = document.getElementById("sidebar2");
-    [...lista.children].forEach((x)=>{x.remove()})
+    [...lista.children].forEach((x)=>{
+        if(x.tagName == "DIV"){
+            x.remove()
+        }
+    })
 
     for (let [image,label] of data) {
         let div = document.createElement("div")
@@ -409,7 +413,7 @@ async function obtener_todas_las_imagenes() {
         alert("No hay más imágenes o ocurrió un error al cargar la imagen.");
     }
 }
-
+obtener_todas_las_imagenes()
 
 function generarColorAleatorioRGB() {
     const r = Math.floor(Math.random() * 256); // Rojo (0-255)
