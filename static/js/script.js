@@ -63,7 +63,7 @@ for (const element of opciones) {
 
 // Dibujar una nueva caja
 imageContainer.addEventListener('mousedown', (event) => {
-    if (event.button !== 0) { // si no es el click izquiero, ignorar
+    if (event.button !== 2) { // si no es el click izquiero, ignorar
         return;
     }
     if (event.target === imageContainer) {
