@@ -353,8 +353,10 @@ async function poner_imagen_especifica(image) {
         // Decodificar la imagen base64 y asignarla al src del <img>
         document.getElementsByClassName('image')[0].src = `data:image/jpeg;base64,${imageBase64}`;
         
-        if(result[2]){
-            crear_cajas_por_label(result[2])
+        if (result[2]) {
+            setTimeout(() => {
+                crear_cajas_por_label(result[2]);
+            }, 10); // 1000 ms = 1 segundo
         }
         } else {
             console.error('Error en la solicitud:', response.statusText);

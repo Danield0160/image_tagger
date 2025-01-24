@@ -19,6 +19,9 @@ app = Flask(__name__)
 
 @app.route("/")
 def home():
+    global dict_archivo_label
+    dict_archivo_label = generar_diccionario_de_archivos(directorio)
+
     return render_template("index.html", opciones=json.dumps(nombre_de_clases_disponibles))
 
 
@@ -150,8 +153,7 @@ def generar_diccionario_de_archivos(directorio):
     return diccionario
 
 
-dict_archivo_label:dict 
-
+dict_archivo_label = {}
 if __name__ == "__main__":
     # opciones = [
     #     ['gato', '255,0,0', 0], 
