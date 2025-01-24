@@ -85,7 +85,7 @@ def get_image():
 
 @app.route('/get_all_images_name')
 def get_all_images_name():
-    return list(dict_archivo_label.items())
+    return list(generar_diccionario_de_archivos(directorio).items())
 
 @app.route('/get_especific_image',methods=["POST"])
 def get_especific_image():
@@ -150,6 +150,7 @@ def generar_diccionario_de_archivos(directorio):
     return diccionario
 
 
+dict_archivo_label:dict 
 
 if __name__ == "__main__":
     # opciones = [
